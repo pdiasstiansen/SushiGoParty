@@ -2,19 +2,50 @@ import random
 
 class Cards:
 
-    def __init__(self):
-        self.name = ''
-        self.type = 0
-        self.food = 0
+    def __init__(self, card):
+        self.name = card[0]
+        self.foodType = card[1]
 
-cardList = []
+    def __repr__(self):
+        return self.name
+
+cardList = [['Nigiri', 0, 12],
+            ['Maki Roll', 1, 12],
+            ['Temaki', 2, 12],
+            ['Uramaki', 3, 12],
+            ['Tempura', 4, 8],
+            ['Sashimi', 5, 8],
+            ['Dumpling', 6, 8],
+            ['Eel', 7, 8],
+            ['Tofu', 8, 8],
+            ['Onigiri', 9, 8],
+            ['Edamame', 10, 8],
+            ['Miso Soup', 11, 8],
+            ['Chopsticks', 12, 3],
+            ['Soy Sauce', 13, 3],
+            ['Tea', 14, 3],
+            ['Menu', 15, 3],
+            ['Spoon', 16, 3],
+            ['Special Order', 17,3],
+            ['Takeout Box', 18, 3],
+            ['Wasabi', 19, 3],
+            ['Pudding', 20, 15],
+            ['Green Tea Ice Cream', 21, 15],
+            ['Fruit', 22, 15]]
+
+cards = []
+
+def makeCards():
+    for card in cardList:
+        for count in range(card[2]):
+            cards.append(Cards(card))
 
 class Player:
 
     count = 1
 
     def __init__(self):
-        self.hand = ['ba','dsfsd', 'asas']
+        self.hand = []
         self.board = []
         self.points = 0
         self.name = 'player' + str(Player.count)
@@ -41,9 +72,7 @@ class Menue:
 
 def isADigit(digit):
     if type(digit) == int:
-        print('bla')
         return True
-    print('ol')
     if digit.isdigit() == True:
         return True
     else:
@@ -59,9 +88,9 @@ def selection(listOfChoices, selection):
             return None
 
 def listMaker(listOfChoices):
-    for index, choice in enumerate(listOfChoices):
-        print(str(index + 1) + ' - ' + str(choice))
-    while True:#Here--------------------------------------------------------------
+    while True:
+        for index, choice in enumerate(listOfChoices):
+            print(str(index + 1) + ' - ' + str(choice))
         choice = input()
         choice = selection(listOfChoices, choice)
         if choice == 'Cancel' and cancel == True:
@@ -72,17 +101,55 @@ def listMaker(listOfChoices):
         else:
             print('You must select a valid option')
 
-while True:
-    playerCount = input('How many players? (2-8)')
-    if isADigit(playerCount) == True and playerCount >= '2' and playerCount <= '8':
-        playerCount = int(playerCount)
-        playerGroup = []
-        for x in range(playerCount):
-            playerGroup.append(Player())
-        print(playerGroup)
-        break
-    else:
-        print('Please select a valid number of players.')
+def playerCount():
+    while True:
+        playerCount = input('How many players? (2-8)')
+        if isADigit(playerCount) == True and playerCount >= '2' and playerCount <= '8':
+            playerCount = int(playerCount)
+            playerGroup = []
+            for x in range(playerCount):
+                playerGroup.append(Player())
+            return playerGroup
+            break
+        else:
+            print('Please select a valid number of players.')
+
+def gameMode():
+    gameModes = ['My First Meal', 'Sushi Go!', 'Party Sampler', 'Master Menu', 'Points Platter', 'Cutthroat Combo', 'Big Banquet', 'Dinner For Two']
+    while True:
+        print('Which meal will you choose (1-8)?')
+        modeChoice = listMaker(gameModes)
+        if modeChoice in gameModes:
+            modeChoice = int(gameModes.index(modeChoice))
+            return modeChoice
+            break
+        else:
+            print('Please select a valid game mode.')
+
+def createDeck(gameMode):
+    deck =[]
+    if gameMode == 0:
+        mode = ['Nigiri', 'Maki Roll', 'Tempura', 'Sashimi', 'Miso Soup', 'Wasabi', 'Tea', 'Green Tea Ice Cream']
+        for card in cards:
+            print(card)
+            if card.name in mode:
+                deck.append(card)
+        return deck
+    elif gameMode == 1:
+        pass
+    elif gameMode == 2:
+        pass
+    elif gameMode == 3:
+        pass
+    elif gameMode == 4:
+        pass
+    elif gameMode == 5:
+        pass
+    elif gameMode == 6:
+        pass
+    elif gameMode == 7:
+        pass
+    
 
 def roundLoop(number):
     rotation = 0
@@ -91,7 +158,13 @@ def roundLoop(number):
     for player in playerGroup:
         player.chooseCard()
 
-roundLoop(1)
+playerGroup = playerCount()
+makeCards()
+gameMode = gameMode()
+deck = createDeck(gameMode)
+print(playerGroup)
+print(gameMode)
+print(deck)
 
 
 
