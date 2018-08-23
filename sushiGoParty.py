@@ -56,8 +56,11 @@ class Player:
 
     def chooseCard(self):
         choice = listMaker(self.hand)
-        
-        
+
+    def dealHand(self, size):
+        random.shuffle(deck)
+        for x in range(size):
+            self.hand.append(deck.pop(0))
 
 class Menue:
 
@@ -149,7 +152,45 @@ def createDeck(gameMode):
         pass
     elif gameMode == 7:
         pass
-    
+
+def removeDessert():
+    global deck
+    dessertPile = []
+    while deck[-1].foodType >= 20:
+        dessertPile.append(deck[-1])
+        deck.pop(-1)
+    return dessertPile
+
+def dessertAmount(playerCount, roundCount):
+    if playerCount <= 5:
+        if roundCount < 3:
+            return 7 - (2*roundCount)
+        else:
+            return 2
+    elif playerCount >= 6:
+        return 9 - (2*roundCount)
+
+def dealDessert(playerCount, roundCount):
+    global dessertPile
+    temp_deck = []
+    amount = dessertAmount(playerCount, roundCount)
+    for x in range(amount):
+        print(x)
+        temp_deck.append(dessertPile.pop(0))
+    return temp_deck
+
+def dealHand(playerCount):
+    if playerCount == 8:
+        amount = 7
+    elif playerCount > 6:
+        amount = 8
+    elif playerCount > 4:
+        amount = 9
+    else:
+        amount = 10
+    for player in playerGroup:
+        player.dealHand(amount)
+            
 
 def roundLoop(number):
     rotation = 0
@@ -158,13 +199,23 @@ def roundLoop(number):
     for player in playerGroup:
         player.chooseCard()
 
+roundCount = 1
 playerGroup = playerCount()
+playerCount = len(playerGroup)
 makeCards()
 gameMode = gameMode()
 deck = createDeck(gameMode)
+dessertPile = removeDessert()
+deck.extend(dealDessert(playerCount, roundCount))
+dealHand(playerCount)
+
 print(playerGroup)
 print(gameMode)
 print(deck)
+print(dessertPile)
+
+for player in playerGroup:
+    print(player.hand)
 
 
 
